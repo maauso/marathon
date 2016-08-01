@@ -26,7 +26,7 @@
     }
   },
   "env": {
-    "ZKLIST": "IP"
+    "ZKLIST": "IP:port,IP:port,IP:port"
   },
   "healthChecks": [
     {
