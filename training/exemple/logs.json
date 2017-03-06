@@ -1,0 +1,91 @@
+{
+  "id": "/test/nginx",
+  "cmd": null,
+  "cpus": 0.1,
+  "mem": 512,
+  "disk": 0,
+  "instances": 5,
+  "constraints": [
+    [
+      "dc",
+      "CLUSTER",
+      "bcn1"
+    ],
+    [
+      "role",
+      "CLUSTER",
+      "app"
+    ],
+    [
+      "rack-id",
+      "CLUSTER",
+      "rack-2D"
+    ],
+    [
+      "rack_id",
+      "LIKE",
+      "rack-[1-3]"
+    ],
+    [ 
+      "hostname", 
+      "UNIQUE"
+    ]
+  ],
+  "container": {
+    "type": "DOCKER",
+    "volumes": [],
+    "docker": {
+      "image": "nginx",
+      "network": "BRIDGE",
+      "portMappings": [
+        {
+          "containerPort": 80,
+          "hostPort": 0,
+          "protocol": "tcp",
+          "name": "nginx",
+          "labels": {}
+        }
+      ],
+      "privileged": false,
+      "parameters": [],
+      "forcePullImage": false,
+      "parameters": [
+        { "key": "log-driver", "value": "fluentd" },
+        { "key": "log-opt", "value": "fluentd-address=localhost:2224" },
+        { "key": "log-opt", "value": "fluentd-async-connect=true" },
+        { "key": "log-opt", "value": "tag=docker.nginx.miguel-nginx" }
+      ]
+    }
+  },
+  "env": {
+    "SERVICE_80_NAME": "miguel-nginx",
+    "SERVICE_80_TAGS": "miguel2",
+    "SERVICE_80_CHECK_INTERVAL":"15s",
+    "SERVICE_80_CHECK_TCP": "true",
+    "SERVICE_80_CHECK_TIMEOUT": "5s"
+  },
+  "healthChecks": [
+    {
+      "protocol": "TCP",
+      "portIndex": 0,
+      "gracePeriodSeconds": 300,
+      "intervalSeconds": 60,
+      "timeoutSeconds": 20,
+      "maxConsecutiveFailures": 3,
+      "ignoreHttp1xx": false
+    }
+  ],
+  "labels": {
+    "PROMEXCLUDE": "true",
+    "HAPROXY_0_MODE": "http",
+    "HAPROXY_0_BALANCE": "roundrobin",
+    "HAPROXY_0_GROUP": "qa-apps",
+    "HAPROXY_0_VHOST": "miguel-nginx.lab.services.odigeo.com"
+  },
+  "maxLaunchDelaySeconds": 60,
+  "taskKillGracePeriodSeconds": 120,
+  "upgradeStrategy": {
+    "minimumHealthCapacity": 0.50,
+    "maximumOverCapacity": 0
+  }
+}

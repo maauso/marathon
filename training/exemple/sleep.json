@@ -1,0 +1,10 @@
+{
+  "id": "/test/miguel",
+  "cmd": "sleep 120",
+  "cpus": 0.1,
+  "mem": 128,
+  "disk": 0,
+  "instances": 1
+}
+
+
